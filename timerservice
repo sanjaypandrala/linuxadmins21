@@ -1,0 +1,30 @@
+timeservice
+
+# linuxadmins21
+# timedatecl
+# timedatectl set-time 9:00:00
+# timedatectl set-ntp true
+# chronyd service manages time
+# config is in /etc/chrony.conf
+# iby default t is using ntp server ntp.pool.org
+
+# server or peers
+# server is authoritative. this is better
+# peer is not, two peers will try to middle timedatecl
+# configuration is in /etc/chrony.config
+# server server.rhatcert.com
+# peer server1.example.com
+# peer server2.example.com
+# systemctl restart chronyd
+# use chronyc for monitoring
+# chronyc sources -v to check current configuration
+# chronyc tracking for detailed info
+#### ex use timedatectl to set time server1 one hour ahead configure NTP
+# synchronization on server1 and server2 to use NTP peers only: both should
+# use one another as peers monitoring time synchronization to a time in
+#### the middle
+#### exexp use timedatecl time-set 16:00 to set timedatecl
+# before starting NTP, remove the server lines from /etc/chrony.conf and add
+# peer lines for the other server
+# use timedatecl set-ntp on to switch on ntp
+# monitor synchronization status using chronyc sources -v or chronyc tracking
