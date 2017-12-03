@@ -1,0 +1,140 @@
+## ## prac
+# yum install -y mariadb mariadb-libs mariadb-test
+# systemctl start mariadb
+# systemctl status mariadb
+# systemct enable mariabd
+# mysql_secure_installation
+# mariadb configuration file is located in vim /etc/my.cnf
+# to login mysql -u root -h localhost -p   ## or mysql -u root -p
+# show databases;
+## ## end prac
+# all command end with ';'
+# create database addressbook;
+# show databases;
+# use addressbook;
+# show tables;
+# use mysql;
+# show tables;
+# describe user;
+# creating a database ####
+# basic commands allow you to create, select, update and delete data in the
+# database
+# to do that you need to know which attributes are available for records
+# use describe to find out, as in describe user;
+# once you know the attributes, you can fill them:
+# INSERT INTO user(Host.User,Password) VALUES('localhost',lisa,password);
+# to delete data, you'll use DELETE FROM something  WHERE
+# something=somethingelse;
+# the WHERE statement is very important, without it you'll delete everything
+# DELETE FROM user WHERE user = rick;
+# UPDATE command;
+# UPDATE user SET password = secret WHERE user =  lisa;
+# Selecting data:
+# SELECT host,user FROM user;
+## ## from the slide below
+# mysql -u root -p
+# create database vedios;
+# USE vedios;
+# CREATE TABLE vedios(tittle VARCHAR(40)), actor VARCHAR(40), year INT,
+# registration INT);
+# INSERT INTO vedios (registration,tittle,actor,year) values(1,'Basic Instincts
+','Sharon Stone ',1992);
+# INSERT INTO vedios(registration,tittle,actor,year) values(2,'Terminator 1',
+'Arnold Schwarzenegger', 1984);
+INSERT INTO vedios(registration,tittle,actor,year) values(3,'Pretty Woman',
+'Julia Robers',1990);
+# SELECT * from vedios;
+## ## end of the slide below
+## ## managing users and permissions
+# CREATE USER lisa@localhost IDENTIFIED BY 'password'; adds a users
+# PAM can also be used
+# DROP USER user@localhost; to remove a user
+# by default, users have no privileges
+# grant privileges on tables or entire database
+# GRANT SELECT,UPDATE,DELETE,INSERT on addressbook.names to lisa@localhost;
+# GRANT SELECT ON database.sometable TO user@host;
+# GRANT SELECT ON database.* TO user@host;
+# GRANT CREATE,ALTER,DROP ON database.* to user@host;
+# GRANT ALL PRIVILLEGES ON *.* to user@host;
+# after modifying privileges, use FLUSH PRIVILLEGES to apply
+# use SHOW GRANTS FOR user@host; to display
+## ## prac start
+# CREATE USER julia@'%' IDENTIFIED BY  'secret' ;
+# GRANT SELECT,UPDATE,DELETE,INSERT on addressbook.* to julia@'%';
+# FLUSH PRIVILLEGES;
+# SHOW GRANTS FOR julia@'%';
+# DESCRIBE vedios;
+# INSERT INTO vedios(registration,tittle,actor,year) VALUES(4,'Arnold
+Schwarzenegger',2013);
+# SELECT * FROM vedios WHERE actor = 'Arnold Schwarzenegger';
+# quit;
+## ## prac end
+## ## start backing up the database
+# database backing can be logical or physical backup
+# physical backup is of database files database must be stopped to make backup
+# physical is portable to other machines with similar hardware and software
+# include logs and configuration
+# logical backup is by querying the database
+# can be created on operational databases
+# relatively slow
+# portable to other DB vendors also
+# for creating logical database backup use the following commands
+# use mysqldump command from shell
+# mysqldump -u root -p videos > /root/videos-db.mysqldump
+# mysqldump -u root -p --all-databases > /root/all-db.dump
+# use LVM volumes to create a physical backup
+# mysqladmin -u root -p variables | grep datadir
+# check availabe disk space in LVM VG: vgs vgname
+# freeze the database to make sure no modification are applied
+# mysql -u root -p
+# FLUSH TABLES WITH READ LOCK;
+# From another terminal create an LVM snapshot
+# lvcreate -L 2G -s -n lvmariadb-snapshot /dev/vgdata/lvmariadb
+# from the mariadb session, type UNLOCK TABLES;
+# from the shell session, mount the snapshot and use it to create a backup
+# mkdir /mnt/snapshot; mount /dev/vgdata/lvmariabdb-snapshot/mnt/snapshot
+# tar -cvf /root/mariadb.tar /mnt/snapshot
+# umount /mnt/snapshot;lvremove /dev/vgdata/lvmariadb-snapshot
+## ## end backing up the database
+## ## prac start backing up databases
+# mount | grep mysql
+# lvs # showing logical volume lvdb 1.00 g
+# vgs # showing VG centos VFree 1.00 g
+#  lvcreate -L 500M -s -n lvmariadb-snap /dev/centos/lvdb # shows snapshot created
+#  mkdir /mnt/snapshot # create a mount point
+# mount /dev/centos/lvdb-snap /mnt/snapshot/ # mount it on /dev/centos
+# tar cvf /root/mariadb.tar /mnt/snapshot
+# umount /mnt/snapshot
+# lvremove /dev/centos/lvdb-snap
+## ## prac end backing up databases
+## ## start restoring database backup
+# for logical backup: use
+# mysql -u root -p videos-db.dump
+# for physical backup
+# systemctl stop mariabd
+# rm -rf /var/lib/mysql/*
+# tar xvf /root/mariadb.tar -C /toputitlocationgiveitspath
+## ## end of restoring database backup
+
+## ## start of ex
+# install mariabd. set the password of user root to 'secret' create a database
+# with the name 'addressbook'. in the db make sure you use the following fields:
+# firstname
+# lastname
+# street
+# number
+# city
+# zip
+# telephone
+
+# enter the following records:
+# linda;Thomsen;State Street; 147758; Proco;48261;651666432
+# Marsha;Smith;Long Street;7812;Honolulu;99303;108555431
+# Marlet;Joanes:Ocean Boulevard;124;Honolulu;99301;108999555
+# make a logical backup of the database and write it to /tmp/address-db.dump
+## ## end of ex
+
+## ## start ex exp
+# follow the procedure as said above
+
+## ## end of ex exp
