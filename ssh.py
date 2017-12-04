@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# this is not python script
 
 '''
 ssh-keygen  will create generate
