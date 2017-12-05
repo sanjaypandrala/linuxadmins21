@@ -105,8 +105,8 @@ as user on server1, use mutt to see the message coming in
 tail -f /var/log/messages
 postqueue -p
 postqueue -f
-
-
+'''
+'''
 command to use are
 postconf
 postconf inet_interface # will show value for specific paramenters
@@ -115,7 +115,5 @@ man 5 postconf
 postqueue -p
 postqueue -f # will flush the queue
 tail -f /var/log/maillog
-
-
 
 '''
